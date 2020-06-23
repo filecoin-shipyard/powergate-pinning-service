@@ -13,9 +13,10 @@ export default function Footer() {
       <br />
       <GitHubButton
         href="https://github.com/dappkit/powergate-pinning-service"
+        data-color-scheme="no-preference: light; light: light; dark: dark;"
         data-size="large"
         data-show-count="true"
-        aria-label="A simple pinning service using textile powergate"
+        aria-label="Star dappkit/powergate-pinning-service on GitHub"
       >
         Star
       </GitHubButton>
