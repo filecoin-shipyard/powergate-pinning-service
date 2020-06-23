@@ -27,9 +27,20 @@ function Login(props) {
   return (
     <Fragment>
       <System.H1>Login</System.H1>
+      <br />
+      <br />
+      <br />
+      <System.ButtonPrimary onClick={loginWithMetamask}>
+        Login With Metamask
+      </System.ButtonPrimary>
     </Fragment>
   );
 }
+
+const loginWithMetamask = async () => {
+  const accounts = await window.ethereum.enable();
+  const account = accounts[0];
+};
 
 const mapStateToProps = (state) => ({
   user: state.app.user,
