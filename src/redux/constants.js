@@ -1,0 +1,7 @@
+export default {
+  LOGIN: "LOGIN",
+  SIGNUP: "SIGNUP",
+  ADD_TODO: "ADD_TODO",
+  GET_TODOS: "GET_TODOS",
+  UPDATE_TODOS: "UPDATE_TODOS",
+};
