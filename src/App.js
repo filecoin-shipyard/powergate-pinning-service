@@ -32,9 +32,9 @@ function App() {
             </Route>
           </Switch>
         </Router>
-        <div style={{ position: "absolute", bottom: "30px", width: "100%" }}>
+        {/*         <div style={{ position: "absolute", bottom: "30px", width: "100%" }}>
           <Footer />
-        </div>
+        </div> */}
       </Provider>
     </center>
   );

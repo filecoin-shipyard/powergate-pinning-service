@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { login } from "../../redux/actions/login";
+import { createFFS } from "../../redux/actions/powergate";
 import { useHistory } from "react-router-dom";
 import * as System from "../../components/system";
 
 function Login(props) {
-  const { user, login } = props;
+  const { user, createFFS } = props;
   const history = useHistory();
 
   // Web3 Browser Detection
@@ -19,8 +19,8 @@ function Login(props) {
       "Metamask is not installed. Get Metamask Plugin https://https://metamask.io/"
     );
   }
-
-  if (user.email) {
+  console.log("USER", user);
+  if (user.address) {
     history.push("/network");
   }
 
@@ -30,16 +30,17 @@ function Login(props) {
       <br />
       <br />
       <br />
-      <System.ButtonPrimary onClick={loginWithMetamask}>
+      <System.ButtonPrimary onClick={() => loginWithMetamask(createFFS)}>
         Login With Metamask
       </System.ButtonPrimary>
     </Fragment>
   );
 }
 
-const loginWithMetamask = async () => {
+const loginWithMetamask = async (createFFS) => {
   const accounts = await window.ethereum.enable();
   const account = accounts[0];
+  createFFS({ address: account });
 };
 
 const mapStateToProps = (state) => ({
@@ -47,7 +48,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (payload) => dispatch(login(payload)),
+  createFFS: (payload) => dispatch(createFFS(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
