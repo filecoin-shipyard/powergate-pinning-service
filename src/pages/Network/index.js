@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import * as System from "../../components/system";
 import { getNetworkStats } from "../../redux/actions/powergate";
+import NavBar from "../../components/NavBar";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
@@ -21,21 +22,47 @@ function Network(props) {
 
   return (
     <Fragment>
+      <NavBar />
       <h1>Network Stats</h1>
 
-      <table>
+      <table style={{ margin: "32px" }}>
         <tr>
           <td>
             <h3>Node Health</h3>
             {/* // Add tooltip */}
             {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
-            {stats.health ? <p>{JSON.stringify(stats.health)}</p> : null}
+            {stats.health ? (
+              stats.health.status === 1 ? (
+                <b>
+                  <font color="green">HEALTHY</font>
+                </b>
+              ) : (
+                <b>
+                  <font color="red">UNHEALTHY</font>
+                </b>
+              )
+            ) : (
+              <p>Loading...</p>
+            )}
           </td>
           <td>
             <h3>Address</h3>
             {/* // Add tooltip */}
             {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
-            {stats.address ? <p>{JSON.stringify(stats.address)}</p> : null}
+            {stats.address ? (
+              <div>
+                <b>ID: </b> {stats.address.addrInfo.id} <br />
+                <b>Supported MultiAddrs: </b>{" "}
+                <ul>
+                  {stats.address.addrInfo.addrsList.map((addr, index) => (
+                    <li key={index}>{addr}</li>
+                  ))}{" "}
+                </ul>
+                <br />
+              </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </td>
         </tr>
         <tr>
@@ -43,17 +70,55 @@ function Network(props) {
             <h3>Peers</h3>
             {/* // Add tooltip */}
             {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
-            {stats.peers ? <p>{JSON.stringify(stats.peers)}</p> : null}
+            {stats.peers ? (
+              <div>
+                {stats.peers.peersList.map((peer, index) => (
+                  <p>
+                    <h4>Peer {` ${index + 1}`} </h4>
+                    <b>ID: </b> {peer.addrInfo.id} <br />
+                    <b>Supported MultiAddrs: </b>{" "}
+                    <ul>
+                      {peer.addrInfo.addrsList.map((addr, index) => (
+                        <li key={index}>{addr}</li>
+                      ))}
+                    </ul>
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </td>
           <td>
             <h3>Miners</h3>
             {/* // Add tooltip */}
             {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
-            {stats.miners ? <p>{JSON.stringify(stats.miners)}</p> : null}
+            {stats.miners ? (
+              <div>
+                <p>
+                  <b>Block Height: </b> {stats.miners.index.chain.lastUpdated}
+                  <b>Online: </b> {stats.miners.index.meta.online} <br />
+                  <b>Offline: </b> {stats.miners.index.meta.offline}
+                </p>
+                <div>
+                  <h4>List of Miners</h4>
+                  {stats.miners.index.chain.minersMap.map((miner, index) => (
+                    <p key={index}>
+                      <h5>Miner {index + 1}</h5>
+                      <b>Name: </b> {miner[0]} <br />
+                      <b>Power: </b> {miner[1].power} <br />
+                      <b>Sector Size: </b> {miner[1].sectorSize} <br />
+                      <b>Active Deals: </b> {miner[1].activeDeals}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </td>
         </tr>
       </table>
-      <Link to="/pin">PIN</Link>
     </Fragment>
   );
 }

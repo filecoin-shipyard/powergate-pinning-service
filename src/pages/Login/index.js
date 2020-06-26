@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { createFFS } from "../../redux/actions/powergate";
 import { useHistory } from "react-router-dom";
 import * as System from "../../components/system";
+import Footer from "../Footer";
 
 function Login(props) {
   const { user, createFFS } = props;
@@ -26,13 +27,19 @@ function Login(props) {
 
   return (
     <Fragment>
-      <System.H1>Login</System.H1>
+      <h1>Login</h1>
       <br />
       <br />
       <br />
-      <System.ButtonPrimary onClick={() => loginWithMetamask(createFFS)}>
+      <button
+        className="btn btn-primary mb-2"
+        onClick={() => loginWithMetamask(createFFS)}
+      >
         Login With Metamask
-      </System.ButtonPrimary>
+      </button>
+      <div style={{ position: "absolute", bottom: "30px", width: "100%" }}>
+        <Footer />
+      </div>
     </Fragment>
   );
 }

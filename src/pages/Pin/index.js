@@ -58,8 +58,6 @@ function Pin(props) {
       <button
         onClick={async () => {
           const file = document.getElementById("uploadToIPFS").files[0];
-          /* const fileBuffer = await new Response(file).arrayBuffer();
-          addFileToIPFS({ fileBuffer: fileBuffer }); */
           var arrayBuffer, uint8Array;
           var fileReader = new FileReader();
           fileReader.onload = function () {

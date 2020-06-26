@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Network from "./pages/Network";
 import Pin from "./pages/Pin";
 import Wallet from "./pages/Wallet";
