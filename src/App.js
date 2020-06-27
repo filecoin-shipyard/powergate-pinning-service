@@ -5,9 +5,9 @@ import Store from "./redux/store";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Network from "./pages/Network";
 import Pin from "./pages/Pin";
-import Wallet from "./pages/Wallet";
+import Profile from "./pages/Profile";
 import Login from "./pages/Login";
-import Footer from "./pages/Footer";
+import Gallery from "./pages/Gallery";
 
 function App() {
   return (
@@ -24,8 +24,11 @@ function App() {
             <Route path="/pin">
               <Pin />
             </Route>
-            <Route path="/wallet">
-              <Wallet />
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/gallery">
+              <Gallery />
             </Route>
             <Route exact path="">
               <Login />

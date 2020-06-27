@@ -15,7 +15,7 @@ function Network(props) {
   }
 
   if (Object.keys(stats).length === 0) {
-    getNetworkStats();
+    setInterval(getNetworkStats, 3000);
   }
 
   console.log(stats);
@@ -25,12 +25,13 @@ function Network(props) {
       <NavBar />
       <h1>Network Stats</h1>
 
-      <table style={{ margin: "32px" }}>
-        <tr>
-          <td>
-            <h3>Node Health</h3>
-            {/* // Add tooltip */}
-            {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
+      <div className="card" style={{ width: "42rem" }}>
+        <div className="card-body">
+          <h5 className="card-title">Node Health</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            Health status of the powergate node
+          </h6>
+          <div className="card-text">
             {stats.health ? (
               stats.health.status === 1 ? (
                 <b>
@@ -44,11 +45,17 @@ function Network(props) {
             ) : (
               <p>Loading...</p>
             )}
-          </td>
-          <td>
-            <h3>Address</h3>
-            {/* // Add tooltip */}
-            {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
+          </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ width: "42rem" }}>
+        <div className="card-body">
+          <h5 className="card-title">Node Address</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            Node id and supported multiAddresses
+          </h6>
+          <div className="card-text">
             {stats.address ? (
               <div>
                 <b>ID: </b> {stats.address.addrInfo.id} <br />
@@ -63,18 +70,22 @@ function Network(props) {
             ) : (
               <p>Loading...</p>
             )}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h3>Peers</h3>
-            {/* // Add tooltip */}
-            {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
+          </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ width: "42rem" }}>
+        <div className="card-body">
+          <h5 className="card-title">Peers</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            List of powergate node peers
+          </h6>
+          <div className="card-text">
             {stats.peers ? (
               <div>
                 {stats.peers.peersList.map((peer, index) => (
-                  <p>
-                    <h4>Peer {` ${index + 1}`} </h4>
+                  <div key={index}>
+                    <h5>Peer {` ${index + 1}`} </h5>
                     <b>ID: </b> {peer.addrInfo.id} <br />
                     <b>Supported MultiAddrs: </b>{" "}
                     <ul>
@@ -82,29 +93,36 @@ function Network(props) {
                         <li key={index}>{addr}</li>
                       ))}
                     </ul>
-                  </p>
+                  </div>
                 ))}
               </div>
             ) : (
               <p>Loading...</p>
             )}
-          </td>
-          <td>
-            <h3>Miners</h3>
-            {/* // Add tooltip */}
-            {/* <System.TooltipAnchor tooltip="Hello friends!!" /> */}
+          </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ width: "42rem" }}>
+        <div className="card-body">
+          <h5 className="card-title">Miners</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            Miners details of our powergate setup
+          </h6>
+          <div className="card-text">
             {stats.miners ? (
               <div>
                 <p>
-                  <b>Block Height: </b> {stats.miners.index.chain.lastUpdated}
+                  <b>Block Height: </b> {stats.miners.index.chain.lastUpdated}{" "}
+                  <br />
                   <b>Online: </b> {stats.miners.index.meta.online} <br />
                   <b>Offline: </b> {stats.miners.index.meta.offline}
                 </p>
                 <div>
-                  <h4>List of Miners</h4>
+                  <h5>List of Miners</h5>
                   {stats.miners.index.chain.minersMap.map((miner, index) => (
                     <p key={index}>
-                      <h5>Miner {index + 1}</h5>
+                      <b>Miner {index + 1}</b>
                       <b>Name: </b> {miner[0]} <br />
                       <b>Power: </b> {miner[1].power} <br />
                       <b>Sector Size: </b> {miner[1].sectorSize} <br />
@@ -116,9 +134,9 @@ function Network(props) {
             ) : (
               <p>Loading...</p>
             )}
-          </td>
-        </tr>
-      </table>
+          </div>
+        </div>
+      </div>
     </Fragment>
   );
 }

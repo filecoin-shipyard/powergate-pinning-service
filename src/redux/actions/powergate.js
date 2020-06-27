@@ -162,8 +162,12 @@ function coldObjToMessage(obj) {
 }
 
 export const addFileToFFS = (payload) => async (dispatch) => {
-  console.log(payload);
   let jobId;
+  const { cid } = await pow.ffs.addToHot(payload.fileBuffer);
+  delete payload["fileBuffer"];
+  payload.cid = cid;
+  payload.newConf.cid = cid;
+  console.log(payload);
   if (payload.withOverrideConfig) {
     jobId = (
       await pow.ffs.pushConfig(
@@ -172,18 +176,37 @@ export const addFileToFFS = (payload) => async (dispatch) => {
         withConfig(payload.newConf)
       )
     ).jobId;
+    console.log("Check 1");
   } else {
     jobId = (await pow.ffs.pushConfig(payload.cid)).jobId;
   }
 
   // watch the FFS job status to see the storage process progressing
   const cancelJob = pow.ffs.watchJobs((job) => {
-    if (job.status === ffs.JobStatus.CANCELED) {
-      console.log("job canceled");
-    } else if (job.status === ffs.JobStatus.FAILED) {
-      console.log("job failed");
-    } else if (job.status === ffs.JobStatus.SUCCESS) {
-      console.log("job success!");
+    switch (job.status) {
+      case ffs.JobStatus.CANCELED:
+        console.log("job canceled");
+        dispatch({
+          type: types.WATCH_LOGS,
+          payload: job,
+        });
+        break;
+      case ffs.JobStatus.FAILED:
+        console.log("job failed");
+        dispatch({
+          type: types.WATCH_LOGS,
+          payload: job,
+        });
+        break;
+      case ffs.JobStatus.SUCCESS:
+        console.log("job success");
+        dispatch({
+          type: types.WATCH_LOGS,
+          payload: job,
+        });
+        break;
+      default:
+        break;
     }
   }, jobId);
 
@@ -192,6 +215,10 @@ export const addFileToFFS = (payload) => async (dispatch) => {
     console.log(
       `received event for cid ${logEvent.cid}: ${JSON.stringify(logEvent)}`
     );
+    dispatch({
+      type: types.WATCH_LOGS,
+      payload: logEvent,
+    });
   }, payload.cid);
 
   dispatch({
@@ -231,11 +258,15 @@ export const getActualCidConfig = (payload) => async (dispatch) => {
 export const getDataFromFFS = (payload) => async (dispatch) => {
   const bytes = await pow.ffs.get(payload.cid);
   console.log(bytes);
+
+  let blob = new Blob([bytes], { type: "octet/stream" });
+  let url = window.URL.createObjectURL(blob);
+
   dispatch({
     type: types.GET_DATA_FROM_FFS,
     payload: {
       cid: payload.cid,
-      bytes: bytes,
+      url: url,
     },
   });
 };

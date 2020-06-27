@@ -4,8 +4,11 @@ const initialState = {
   user: {
     cids: [],
   },
+  ffsFiles: [],
   stats: {},
   loaded: false,
+  watchLogs: [],
+  watchJobs: null,
 };
 
 export default (state = initialState, action) => {
@@ -38,6 +41,12 @@ export default (state = initialState, action) => {
           cids: [...state.user.cids, action.payload],
         },
       };
+    case types.WATCH_JOBS:
+      return { ...state, watchJobs: action.payload };
+    case types.WATCH_LOGS:
+      return { ...state, watchLogs: [...state.watchLogs, action.payload] };
+    case types.GET_DATA_FROM_FFS:
+      return { ...state, ffsFiles: [...state.ffsFiles, action.payload] };
     default:
       return state;
   }

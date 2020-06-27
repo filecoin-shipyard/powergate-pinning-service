@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import * as System from "../../components/system";
 import {
   getFFSInfo,
@@ -9,6 +9,7 @@ import {
   getCidConfig,
   getActualCidConfig,
 } from "../../redux/actions/powergate";
+import NavBar from "../../components/NavBar";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
@@ -16,6 +17,8 @@ import { useHistory } from "react-router-dom";
 function Pin(props) {
   const {
     user,
+    watchJobs,
+    watchLogs,
     getFFSInfo,
     getDataFromFFS,
     addFileToFFS,
@@ -34,119 +37,299 @@ function Pin(props) {
     getFFSInfo();
   }
 
+  // Check box States
+  // const [enablePublicIPFS, setEnablePublicIPFS] = useState(true);
+  // const [allowUnfreeze, setAllowUnfreeze] = useState(false);
+  // const [enableFilecoinStorage, setEnableFilecoinStorage] = useState(true);
+  // const [renew, setRenew] = useState(false);
+  // const [repairable, setRepairable] = useState(false);
+
+  // Input States
+  // const [timeout, setTimeout] = useState(30);
+  // const [replicationFactor, setReplicationFactor] = useState(1);
+  // const [minDealDuration, setMinDealDuration] = useState(1000);
+  // const [excludedMinersList, setExcludedMinersList] = useState("");
+  // const [trustedMinersList, setTrustedMinersList] = useState("");
+  // const [countryCodesList, setCountryCodesList] = useState("");
+  // const [threshold, setThreshold] = useState(0);
+  // const [maxPrice, setMaxPrice] = useState(0);
+
   return (
     <Fragment>
-      <h1>Pin</h1>
-      <h3>FFS Info</h3>
-      {user.ffsInfo ? <p>{JSON.stringify(user.ffsInfo)}</p> : null}
-      <button onClick={getFFSInfo}>Get FFS Config</button>
-      <h3>Set Default Global Config</h3>
-      <textarea id="globalDefaultConfig"></textarea>
+      <NavBar />
+      <h1>Pinning Service</h1>
+      <h3>1. Select File</h3>
+      <input id="fileToUpload" type="file" /> <br />
+      <br />
+      <h3>2. Configure Storage Options</h3>
+      <div className="card" style={{ width: "48rem" }}>
+        <div className="card-body">
+          <div className="card-text">
+            <input
+              type="checkbox"
+              id="enablePublicIPFS"
+              name="Add to Public IPFS Network"
+              value="Yes"
+            />{" "}
+            <label for="enablePublicIPFS"> Add to Public IPFS Network</label>
+            <br></br>
+            <div id="ipfsOptions">
+              <input
+                type="checkbox"
+                id="allowUnfreeze"
+                name="Allow Un-Freeze"
+                value="Yes"
+              />{" "}
+              <label for="allowUnfreeze"> Allow Un-Freeze</label>
+              <br></br>
+              <label for="addTimeout"> Timeout (in seconds): </label> {"  "}
+              <input
+                type="text"
+                id="addTimeout"
+                name="addTimeout"
+                value="30"
+                placeholder="Timeout"
+              />
+            </div>
+            <br></br>
+            <input
+              type="checkbox"
+              id="enableFilecoinStorage"
+              name="Add to Filecoin Network"
+              value="Yes"
+            />
+            <label for="enableFilecoinStorage"> Add to Filecoin Network</label>
+            <br></br>
+            <div id="filecoinOptions">
+              <label for="replicationFactor"> Replication Factor: </label>{" "}
+              {"  "}
+              <input
+                type="text"
+                id="replicationFactor"
+                name="repFactor"
+                value="1"
+                placeholder="Replication Factor"
+              />
+              <br />
+              <br />
+              <label for="minDealDuration">
+                {" "}
+                Minimum Deal Duration (in seconds):{" "}
+              </label>{" "}
+              {"  "}
+              <input
+                type="text"
+                id="minDealDuration"
+                name="repFactor"
+                value="1000"
+                placeholder="Minimum Deal Duration"
+              />
+              <br />
+              <br />
+              <label for="excludedMinersList">
+                {" "}
+                Excluded Miners List:{" "}
+              </label>{" "}
+              {"  "}
+              <input
+                type="text"
+                id="excludedMinersList"
+                name="addTimeout"
+                value=""
+                placeholder="Excluded Miners List"
+              />
+              <br />
+              <br />
+              <label for="trustedMinersList"> Trusted Miners List: </label>{" "}
+              {"  "}
+              <input
+                type="text"
+                id="trustedMinersList"
+                name="trustedMinersList"
+                value=""
+                placeholder="Trusted Miners List"
+              />
+              <br />
+              <br />
+              <label for="countryCodesList"> Country Codes List: </label> {"  "}
+              <input
+                type="text"
+                id="countryCodesList"
+                name="countryCodesList"
+                value=""
+                placeholder="Country Codes List"
+              />
+              <br />
+              <br />
+              <input type="checkbox" id="renew" name="renew" value="Yes" />{" "}
+              <label for="renew"> Renew</label>
+              <br />
+              <br />
+              <div id="renewOptions">
+                <label for="threshold"> Threshold: </label> {"  "}
+                <input
+                  type="text"
+                  id="threshold"
+                  name="threshold"
+                  value="0"
+                  placeholder="Threshold"
+                />
+              </div>
+              <br />
+              <br />
+              <label for="maxPrice"> Max Price: </label> {"  "}
+              <input
+                type="text"
+                id="maxPrice"
+                name="maxPrice"
+                value="0"
+                placeholder="maxPrice"
+              />
+            </div>
+            <br />
+            <br />
+            <input
+              type="checkbox"
+              id="repairable"
+              name="repairable"
+              value="Yes"
+            />{" "}
+            <label for="repairable"> Repairable</label>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <h3>3. Add to Filecoin</h3>
       <button
         onClick={() => {
-          setDefaultConfig({
-            defaultConfig: JSON.parse(
-              document.getElementById("globalDefaultConfig").value
-            ),
-          });
-        }}
-      >
-        Set Global Default Config
-      </button>
-      <h3>Add File to IPFS</h3>
-      <input type="file" id="uploadToIPFS" />
-      <button
-        onClick={async () => {
-          const file = document.getElementById("uploadToIPFS").files[0];
+          const file = document.getElementById("fileToUpload").files[0];
+          const enablePublicIPFS = document.getElementById("enablePublicIPFS")
+            .checked;
+          const allowUnfreeze = document.getElementById("allowUnfreeze")
+            .checked;
+          const enableFilecoinStorage = document.getElementById(
+            "enableFilecoinStorage"
+          ).checked;
+          const renew = document.getElementById("renew").checked;
+          const repairable = document.getElementById("repairable").checked;
+
+          const addTimeout = document.getElementById("addTimeout").value;
+          const replicationFactor = document.getElementById("replicationFactor")
+            .value;
+          const minDealDuration = document.getElementById("minDealDuration")
+            .value;
+          const excludedMinersString = document.getElementById(
+            "excludedMinersList"
+          ).value;
+          const trustedMinersString = document.getElementById(
+            "trustedMinersList"
+          ).value;
+          const countryCodesString = document.getElementById("countryCodesList")
+            .value;
+          const threshold = document.getElementById("threshold").value;
+          const maxPrice = document.getElementById("maxPrice").value;
+
+          let excludedMinersList = excludedMinersString.split(",");
+          let trustedMinersList = trustedMinersString.split(",");
+          let countryCodesList = countryCodesString.split(",");
+
+          removeItem(excludedMinersList, "");
+          removeItem(trustedMinersList, "");
+          removeItem(countryCodesList, "");
+
           var arrayBuffer, uint8Array;
           var fileReader = new FileReader();
           fileReader.onload = function () {
             arrayBuffer = this.result;
             uint8Array = new Uint8Array(arrayBuffer);
-            addFileToIPFS({ fileBuffer: uint8Array });
+            addFileToFFS({
+              fileBuffer: uint8Array,
+              withOverrideConfig: true,
+              newConf: {
+                hot: {
+                  enabled: enablePublicIPFS,
+                  allowUnfreeze: allowUnfreeze,
+                  ipfs: {
+                    addTimeout: parseInt(addTimeout),
+                  },
+                },
+                cold: {
+                  enabled: enableFilecoinStorage,
+                  filecoin: {
+                    repFactor: parseInt(replicationFactor),
+                    dealMinDuration: parseInt(minDealDuration),
+                    excludedMinersList: excludedMinersList,
+                    trustedMinersList: trustedMinersList,
+                    countryCodesList: countryCodesList,
+                    renew: {
+                      enabled: renew,
+                      threshold: parseInt(threshold),
+                    },
+                    addr: user.ffsInfo.defaultConfig.cold.filecoin.addr,
+                    maxPrice: parseInt(maxPrice),
+                  },
+                },
+                repairable: repairable,
+              },
+            });
           };
           fileReader.readAsArrayBuffer(file);
         }}
       >
-        Upload to IPFS
+        Upload
       </button>
-      {user.cids.map((cid, index) => {
-        return <p key={index}>{JSON.stringify(cid)}</p>;
-      })}
-      <h3>Upload to FFS</h3>
-      <input type="text" id="uploadToFFS" />
-      <button
-        onClick={async () => {
-          const cid = document.getElementById("uploadToFFS").value;
-          addFileToFFS({
-            cid: cid,
-            withOverrideConfig: true,
-            newConf: {
-              cid: cid,
-              hot: {
-                enabled: true,
-                allowUnfreeze: false,
-                ipfs: {
-                  addTimeout: 15,
-                },
-              },
-              cold: {
-                enabled: true,
-                filecoin: {
-                  repFactor: 1,
-                  dealMinDuration: 1000,
-                  excludedMinersList: [],
-                  trustedMinersList: [],
-                  countryCodesList: [],
-                  renew: {
-                    enabled: false,
-                    threshold: 0,
-                  },
-                  addr:
-                    "t3ugwhdige2nvq4z3mdioishuojyjfqcx7ex547l7lzpstsr2mjfvlnmelvdt5ewrrf52vk7z2iljidx776hyq",
-                  maxPrice: 0,
-                },
-              },
-              repairable: false,
-            },
-          });
-        }}
-      >
-        Upload to FFS
-      </button>
-      <h3>Get Desired CID Config</h3>
-      <button
-        onClick={() => {
-          const cid = document.getElementById("uploadToFFS").value;
-          getCidConfig({ cid: cid });
-        }}
-      >
-        Get CID Config
-      </button>
-      <h3>Get Actual CID Config</h3>
-      <button
-        onClick={() => {
-          const cid = document.getElementById("uploadToFFS").value;
-          getActualCidConfig({ cid: cid });
-        }}
-      >
-        Get Actual CID Config
-      </button>
-      <h3>Get Data from FFS</h3>
-      <button
-        onClick={() => {
-          const cid = document.getElementById("uploadToFFS").value;
-          getDataFromFFS({ cid: cid });
-        }}
-      >
-        Get Data from FFS
-      </button>
+      <br />
+      <br />
+      <h3>4. Deal Status</h3>
+      {watchLogs.length > 0 ? (
+        <div>
+          {watchLogs.map((log, index) => (
+            <div key={index} className="card" style={{ width: "48rem" }}>
+              <div className="card-body">
+                <h5 className="card-title">{log.msg}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {new Date(log.time * 1000).toUTCString()}
+                </h6>
+                <p className="card-text">
+                  <b>Job ID: </b> {log.jid} <br />
+                  <b>CID: </b>{" "}
+                  <a
+                    href={`http://localhost:8080/ipfs/${log.cid}`}
+                    target="_blank"
+                  >
+                    {log.cid}
+                  </a>{" "}
+                  <br />
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>
+          No Recent Deals. Upload something to Filecoin Network to see
+          sweet-sweet deals :)
+        </p>
+      )}
     </Fragment>
   );
 }
 
+const removeItem = (array, item) => {
+  var i = array.length;
+
+  while (i--) {
+    if (array[i] === item) {
+      array.splice(array.indexOf(item), 1);
+    }
+  }
+};
+
 const mapStateToProps = (state) => ({
   user: state.app.user,
+  watchJobs: state.app.watchJobs,
+  watchLogs: state.app.watchLogs,
 });
 
 const mapDispatchToProps = (dispatch) => ({
