@@ -3,7 +3,7 @@ require("dotenv").config();
 
 var pow;
 
-const POW_HOST = process.env.POW_HOST;
+const POW_HOST = "http://localhost:6002";
 
 export const getPowergateInstance = () => {
   if (pow) {
