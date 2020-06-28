@@ -5,7 +5,7 @@ export default function NavBar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="#">
-        Filecoin Network Explorer
+        Powergate Pinning Service
       </Link>
       <button
         className="navbar-toggler"

@@ -4,7 +4,7 @@ import { addUser, getUser, updateUser } from "../../utils/database";
 import { ffs } from "@textile/powergate-client";
 const pow = getPowergateInstance();
 
-export const getNetworkStats = (payload) => async (dispatch) => {
+export const getNetworkStats = () => async (dispatch) => {
   const [respPeers, respAddr, respHealth, respMiners] = await Promise.all([
     pow.net.peers(),
     pow.net.listenAddr(),
@@ -27,12 +27,10 @@ export const createFFS = (payload) => async (dispatch) => {
   const user = await getUser(payload.address);
   let TOKEN;
   if (user.token) {
-    console.log("USE OLD TOKEN");
     // If user already has a FFS token, use that
     pow.setToken(user.token);
     TOKEN = user.token;
   } else {
-    console.log("CREATE NEW TOKEN");
     // If user does not have a FFS token, create one
     const { token } = await pow.ffs.create(); // save this token for later use!
     pow.setToken(token);
@@ -54,7 +52,7 @@ export const createFFS = (payload) => async (dispatch) => {
   });
 };
 
-export const getWalletAddresses = (payload) => async (dispatch) => {
+export const getWalletAddresses = () => async (dispatch) => {
   const { addrsList } = await pow.ffs.addrs();
   dispatch({
     type: types.GET_WALLET_ADDRESSES,
@@ -64,20 +62,18 @@ export const getWalletAddresses = (payload) => async (dispatch) => {
   });
 };
 
-export const createWalletAddr = (payload) => async (dispatch) => {
+export const createWalletAddr = () => async (dispatch) => {
   const { addr } = await pow.ffs.newAddr("my new addr");
-  const { addrsList } = await pow.ffs.addrs();
   dispatch({
     type: types.CREATE_WALLET_ADDRESSES,
     payload: {
-      wallets: addrsList,
+      wallets: addr,
     },
   });
 };
 
-export const getFFSInfo = (payload) => async (dispatch) => {
+export const getFFSInfo = () => async (dispatch) => {
   const { info } = await pow.ffs.info();
-  console.log(info);
   dispatch({
     type: types.GET_FFS_INFO,
     payload: {
@@ -163,12 +159,15 @@ function coldObjToMessage(obj) {
 
 export const addFileToFFS = (payload) => async (dispatch) => {
   let jobId;
+
+  // First, add the file to IPFS Network
   const { cid } = await pow.ffs.addToHot(payload.fileBuffer);
   delete payload["fileBuffer"];
   payload.cid = cid;
   payload.newConf.cid = cid;
-  console.log(payload);
+
   if (payload.withOverrideConfig) {
+    // You want to override the default FFS config with new config
     jobId = (
       await pow.ffs.pushConfig(
         payload.cid,
@@ -176,8 +175,8 @@ export const addFileToFFS = (payload) => async (dispatch) => {
         withConfig(payload.newConf)
       )
     ).jobId;
-    console.log("Check 1");
   } else {
+    // You want to keep the default FFS config
     jobId = (await pow.ffs.pushConfig(payload.cid)).jobId;
   }
 
@@ -185,21 +184,18 @@ export const addFileToFFS = (payload) => async (dispatch) => {
   const cancelJob = pow.ffs.watchJobs((job) => {
     switch (job.status) {
       case ffs.JobStatus.CANCELED:
-        console.log("job canceled");
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
         });
         break;
       case ffs.JobStatus.FAILED:
-        console.log("job failed");
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
         });
         break;
       case ffs.JobStatus.SUCCESS:
-        console.log("job success");
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
@@ -212,9 +208,6 @@ export const addFileToFFS = (payload) => async (dispatch) => {
 
   // watch all FFS events for a cid
   const cancelWatch = pow.ffs.watchLogs((logEvent) => {
-    console.log(
-      `received event for cid ${logEvent.cid}: ${JSON.stringify(logEvent)}`
-    );
     dispatch({
       type: types.WATCH_LOGS,
       payload: logEvent,

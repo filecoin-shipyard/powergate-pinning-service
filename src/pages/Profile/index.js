@@ -3,7 +3,7 @@ import NavBar from "../../components/NavBar";
 import { getFFSInfo } from "../../redux/actions/powergate";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-//import ReactJson from "react-json-view";
+import ReactJson from "react-json-view";
 import FilecoinGIF from "../../assets/filecoin.gif";
 
 function Profile(props) {
@@ -34,6 +34,14 @@ function Profile(props) {
                 <b>Wallet Address: </b> {wallet.addr.addr} <br />
                 <b>Wallet Type: </b> {wallet.addr.type} <br />
                 <b>Wallet Balance: </b> {wallet.balance} FIL <br />
+              </div>
+              <br />
+              <div className="card-link">
+                <ReactJson
+                  src={user.ffsInfo}
+                  collapsed={true}
+                  name="FFS JSON"
+                />
               </div>
             </div>
           </div>

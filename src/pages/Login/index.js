@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { createFFS } from "../../redux/actions/powergate";
 import { useHistory } from "react-router-dom";
-import * as System from "../../components/system";
 import Footer from "../Footer";
 
 function Login(props) {
@@ -20,8 +18,9 @@ function Login(props) {
       "Metamask is not installed. Get Metamask Plugin https://https://metamask.io/"
     );
   }
-  console.log("USER", user);
+
   if (user.address) {
+    // Go to Networks page after user is logged in
     history.push("/network");
   }
 
@@ -46,8 +45,8 @@ function Login(props) {
 
 const loginWithMetamask = async (createFFS) => {
   const accounts = await window.ethereum.enable();
-  const account = accounts[0];
-  createFFS({ address: account });
+  const address = accounts[0];
+  createFFS({ address: address });
 };
 
 const mapStateToProps = (state) => ({

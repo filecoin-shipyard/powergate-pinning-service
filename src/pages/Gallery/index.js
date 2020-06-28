@@ -42,7 +42,7 @@ function Gallery(props) {
     <Fragment>
       <NavBar />
       <h1>Gallery</h1>
-      <h3>Files Stored on IPFS & Filecoin</h3>
+      <h3>Get data from IPFS</h3>
       {user.ffsInfo ? (
         user.ffsInfo.pinsList.length > 0 ? (
           <div>
