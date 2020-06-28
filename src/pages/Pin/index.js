@@ -85,6 +85,7 @@ function Pin(props) {
               <label for="addTimeout"> Timeout (in seconds): </label> {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="addTimeout"
                 name="addTimeout"
                 value="30"
@@ -105,6 +106,7 @@ function Pin(props) {
               {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="replicationFactor"
                 name="repFactor"
                 value="1"
@@ -119,6 +121,7 @@ function Pin(props) {
               {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="minDealDuration"
                 name="repFactor"
                 value="1000"
@@ -133,6 +136,7 @@ function Pin(props) {
               {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="excludedMinersList"
                 name="addTimeout"
                 value=""
@@ -144,6 +148,7 @@ function Pin(props) {
               {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="trustedMinersList"
                 name="trustedMinersList"
                 value=""
@@ -154,6 +159,7 @@ function Pin(props) {
               <label for="countryCodesList"> Country Codes List: </label> {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="countryCodesList"
                 name="countryCodesList"
                 value=""
@@ -169,6 +175,7 @@ function Pin(props) {
                 <label for="threshold"> Threshold: </label> {"  "}
                 <input
                   type="text"
+                  class="form-control"
                   id="threshold"
                   name="threshold"
                   value="0"
@@ -180,6 +187,7 @@ function Pin(props) {
               <label for="maxPrice"> Max Price: </label> {"  "}
               <input
                 type="text"
+                class="form-control"
                 id="maxPrice"
                 name="maxPrice"
                 value="0"
@@ -202,6 +210,7 @@ function Pin(props) {
       <br />
       <h3>3. Add to Filecoin</h3>
       <button
+        className="btn btn-primary mb-2"
         onClick={() => {
           const file = document.getElementById("fileToUpload").files[0];
           const enablePublicIPFS = document.getElementById("enablePublicIPFS")

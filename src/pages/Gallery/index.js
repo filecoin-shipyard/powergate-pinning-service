@@ -44,25 +44,31 @@ function Gallery(props) {
       <h1>Gallery</h1>
       <h3>Files Stored on IPFS & Filecoin</h3>
       {user.ffsInfo ? (
-        <div>
-          {user.ffsInfo.pinsList.map((pin, index) => (
-            <div key={index} className="card" style={{ width: "48rem" }}>
-              <div className="card-body">
-                <h5 className="card-title">File {index + 1}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{pin}</h6>
-                {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
-                <a
-                  href={`http://localhost:8080/ipfs/${pin}`}
-                  className="card-link"
-                  target="_blank"
-                  download
-                >
-                  Download file from IPFS
-                </a>
+        user.ffsInfo.pinsList.length > 0 ? (
+          <div>
+            {user.ffsInfo.pinsList.map((pin, index) => (
+              <div key={index} className="card" style={{ width: "48rem" }}>
+                <div className="card-body">
+                  <h5 className="card-title">File {index + 1}</h5>
+                  <h6 className="card-subtitle mb-2 text-muted">{pin}</h6>
+                  {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
+                  <a
+                    href={`http://localhost:8080/ipfs/${pin}`}
+                    className="card-link"
+                    target="_blank"
+                    download
+                  >
+                    Download file from IPFS
+                  </a>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <h6>
+            No files stored! Try <Link to="/pin">adding a file</Link>
+          </h6>
+        )
       ) : (
         <img src={FilecoinGIF} />
       )}
@@ -70,6 +76,7 @@ function Gallery(props) {
       <h3>Get Data from Filecoin File System (FFS)</h3>
       <input type="text" id="getFromFFS" placeholder="Add CID here" />
       <button
+        className="btn btn-primary mb-2"
         onClick={() => {
           const cid = document.getElementById("getFromFFS").value;
           getDataFromFFS({ cid: cid });

@@ -1,14 +1,15 @@
 import { createPow } from "@textile/powergate-client";
-
-const host = "http://localhost:6002"; // or whatever powergate instance you want
+require("dotenv").config();
 
 var pow;
+
+const POW_HOST = process.env.POW_HOST;
 
 export const getPowergateInstance = () => {
   if (pow) {
     return pow;
   } else {
-    pow = createPow({ host });
+    pow = createPow({ POW_HOST });
     return pow;
   }
 };
