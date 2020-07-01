@@ -1,5 +1,5 @@
 import PouchDB from "pouchdb";
-var db = new PouchDB("my_database_1");
+var db = new PouchDB("my_database");
 
 export const addUser = (user) => {
   return new Promise((resolve, reject) => {

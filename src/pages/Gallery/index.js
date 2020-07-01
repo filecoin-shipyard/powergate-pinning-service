@@ -36,6 +36,10 @@ function Gallery(props) {
 
   if (!user.ffsInfo) {
     setInterval(getFFSInfo, 3000);
+  } else {
+    if (user.ffsInfo.pinsList.length === 0) {
+      setInterval(getFFSInfo, 3000);
+    }
   }
 
   return (
