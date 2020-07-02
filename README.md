@@ -1,5 +1,10 @@
 ## Powergate Pinning Tutorial
 
+- [Overview](#overview)
+- [App Architecture Overview](#app-architecture-overview)
+- [How to run](#how-to-run)
+- [License](#license)
+
 ### Overview
 
 In this tutorial, we will build a simple pinning service using Textile Powergate.
@@ -44,3 +49,10 @@ Below is the 10,000 feet overview of how our application will work:
 ### How to run
 
 Follow [this tutorial]() on Filecoin docs to get started.
+
+### License
+
+This is dual-licensed under Apache 2.0 and MIT terms:
+
+- Apache License, Version 2.0, ([LICENSE-APACHE](./LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE-MIT](./LICENSE-MIT) or http://opensource.org/licenses/MIT)
