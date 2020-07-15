@@ -1,7 +1,10 @@
 import types from "../constants";
-import { getPowergateInstance } from "../../utils/powergate";
-import { addUser, getUser, updateUser } from "../../utils/database";
-import { ffs } from "@textile/powergate-client";
+import {
+  getPowergateInstance,
+  ffsOptions,
+  ffsTypes,
+} from "../../utils/powergate";
+import { addUser, getUser } from "../../utils/database";
 const pow = getPowergateInstance();
 
 export const getNetworkStats = () => async (dispatch) => {
@@ -103,60 +106,6 @@ export const addFileToIPFS = (payload) => async (dispatch) => {
   });
 };
 
-const withOverrideConfig = (override) => (req) => {
-  req.setHasOverrideConfig(true);
-  req.setOverrideConfig(override);
-};
-
-const withConfig = (config) => (req) => {
-  const c = new ffs.CidConfig();
-  c.setCid(config.cid);
-  c.setRepairable(config.repairable);
-  if (config.hot) {
-    c.setHot(hotObjToMessage(config.hot));
-  }
-  if (config.cold) {
-    c.setCold(coldObjToMessage(config.cold));
-  }
-  req.setHasConfig(true);
-  req.setConfig(c);
-};
-
-function hotObjToMessage(obj) {
-  const hot = new ffs.HotConfig();
-  hot.setAllowUnfreeze(obj.allowUnfreeze);
-  hot.setEnabled(obj.enabled);
-  if (obj?.ipfs) {
-    const ipfs = new ffs.IpfsConfig();
-    ipfs.setAddTimeout(obj.ipfs.addTimeout);
-    hot.setIpfs(ipfs);
-  }
-  return hot;
-}
-
-function coldObjToMessage(obj) {
-  const cold = new ffs.ColdConfig();
-  cold.setEnabled(obj.enabled);
-  if (obj.filecoin) {
-    const fc = new ffs.FilConfig();
-    fc.setAddr(obj.filecoin.addr);
-    fc.setCountryCodesList(obj.filecoin.countryCodesList);
-    fc.setDealMinDuration(obj.filecoin.dealMinDuration);
-    fc.setExcludedMinersList(obj.filecoin.excludedMinersList);
-    fc.setMaxPrice(obj.filecoin.maxPrice);
-    fc.setRepFactor(obj.filecoin.repFactor);
-    fc.setTrustedMinersList(obj.filecoin.trustedMinersList);
-    if (obj.filecoin.renew) {
-      const renew = new ffs.FilRenew();
-      renew.setEnabled(obj.filecoin.renew.enabled);
-      renew.setThreshold(obj.filecoin.renew.threshold);
-      fc.setRenew(renew);
-    }
-    cold.setFilecoin(fc);
-  }
-  return cold;
-}
-
 export const addFileToFFS = (payload) => async (dispatch) => {
   let jobId;
 
@@ -171,8 +120,8 @@ export const addFileToFFS = (payload) => async (dispatch) => {
     jobId = (
       await pow.ffs.pushConfig(
         payload.cid,
-        withOverrideConfig(true),
-        withConfig(payload.newConf)
+        ffsOptions.withOverrideConfig(true),
+        ffsOptions.withConfig(payload.newConf)
       )
     ).jobId;
   } else {
@@ -183,19 +132,19 @@ export const addFileToFFS = (payload) => async (dispatch) => {
   // watch the FFS job status to see the storage process progressing
   const cancelJob = pow.ffs.watchJobs((job) => {
     switch (job.status) {
-      case ffs.JobStatus.CANCELED:
+      case ffsTypes.JobStatus.JOB_STATUS_CANCELED:
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
         });
         break;
-      case ffs.JobStatus.FAILED:
+      case ffsTypes.JobStatus.JOB_STATUS_FAILED:
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
         });
         break;
-      case ffs.JobStatus.SUCCESS:
+      case ffsTypes.JobStatus.JOB_STATUS_SUCCESS:
         dispatch({
           type: types.WATCH_LOGS,
           payload: job,
