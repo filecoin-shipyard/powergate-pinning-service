@@ -66,7 +66,7 @@ export const getWalletAddresses = () => async (dispatch) => {
 };
 
 export const createWalletAddr = () => async (dispatch) => {
-  const { addr } = await pow.ffs.newAddr("my new addr");
+  const { addr } = await pow.ffs.newAddr("my wallet name", "bls", false);
   dispatch({
     type: types.CREATE_WALLET_ADDRESSES,
     payload: {
@@ -77,6 +77,7 @@ export const createWalletAddr = () => async (dispatch) => {
 
 export const getFFSInfo = () => async (dispatch) => {
   const { info } = await pow.ffs.info();
+  console.log(JSON.stringify(info));
   dispatch({
     type: types.GET_FFS_INFO,
     payload: {
@@ -130,7 +131,7 @@ export const addFileToFFS = (payload) => async (dispatch) => {
   }
 
   // watch the FFS job status to see the storage process progressing
-  const cancelJob = pow.ffs.watchJobs((job) => {
+  pow.ffs.watchJobs((job) => {
     switch (job.status) {
       case ffsTypes.JobStatus.JOB_STATUS_CANCELED:
         dispatch({
@@ -156,7 +157,7 @@ export const addFileToFFS = (payload) => async (dispatch) => {
   }, jobId);
 
   // watch all FFS events for a cid
-  const cancelWatch = pow.ffs.watchLogs((logEvent) => {
+  pow.ffs.watchLogs((logEvent) => {
     dispatch({
       type: types.WATCH_LOGS,
       payload: logEvent,
