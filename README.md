@@ -36,7 +36,7 @@ Here is a sneak-peek of how the final application will look:
 Below is the 10,000 feet overview of how our application will work:
 
 1. A docker-compose script runs a Powergate, Lotus (filecoin client), and IPFS node.
-2. A React dashbaord showing different features of the pinning service that uses Powergate JS Client to interact with the running powergate node.
+2. A React dashboard showing different features of the pinning service that uses Powergate JS Client to interact with the running powergate node.
 
 **Overall Achitecture**
 
