@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
 import * as System from "../../components/system";
 import {
-  getFFSInfo,
+  getPinsList,
   addFileToFFS,
-  addFileToIPFS,
   getDataFromFFS,
   setDefaultConfig,
   getCidConfig,
@@ -19,45 +18,44 @@ function Gallery(props) {
   const {
     user,
     ffsFiles,
-    getFFSInfo,
     getDataFromFFS,
+    getPinsList,
     /* getDataFromFFS,
     addFileToFFS,
-    addFileToIPFS,
     setDefaultConfig,
     getCidConfig,
     getActualCidConfig, */
   } = props;
   const history = useHistory();
 
-  if (!user.address) {
+  if (!user || !user.address) {
     history.push("/");
-  }
 
-  if (!user.ffsInfo) {
-    setInterval(getFFSInfo, 3000);
+  }
+  
+  if (!user.pinsList) {
+    setInterval(getPinsList, 3000);
   } else {
-    if (user.ffsInfo.pinsList.length === 0) {
-      setInterval(getFFSInfo, 3000);
+    if (user.pinsList.length === 0) {
+      setInterval(getPinsList, 3000);
     }
   }
-
   return (
     <Fragment>
       <NavBar />
       <h1>Gallery</h1>
       <h3>Get data from IPFS</h3>
-      {user.ffsInfo ? (
-        user.ffsInfo.pinsList.length > 0 ? (
+      {user && user.pinsList ? (
+        user.pinsList.length > 0 ? (
           <div>
-            {user.ffsInfo.pinsList.map((pin, index) => (
+            {user.pinsList.map((pin, index) => (
               <div key={index} className="card" style={{ width: "48rem" }}>
                 <div className="card-body">
                   <h5 className="card-title">File {index + 1}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">{pin}</h6>
+                  <h6 className="card-subtitle mb-2 text-muted">{pin.cid}</h6>
                   {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
                   <a
-                    href={`http://localhost:8080/ipfs/${pin}`}
+                    href={`http://localhost:8080/ipfs/${pin.cid}`}
                     className="card-link"
                     target="_blank"
                     download
@@ -116,10 +114,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getFFSInfo: () => dispatch(getFFSInfo()),
+  getPinsList: () => dispatch(getPinsList()),
   getDataFromFFS: (payload) => dispatch(getDataFromFFS(payload)),
   addFileToFFS: (payload) => dispatch(addFileToFFS(payload)),
-  addFileToIPFS: (payload) => dispatch(addFileToIPFS(payload)),
   setDefaultConfig: (payload) => dispatch(setDefaultConfig(payload)),
   getCidConfig: (payload) => dispatch(getCidConfig(payload)),
   getActualCidConfig: (payload) => dispatch(getActualCidConfig(payload)),

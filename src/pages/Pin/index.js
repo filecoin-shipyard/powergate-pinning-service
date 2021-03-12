@@ -3,7 +3,6 @@ import * as System from "../../components/system";
 import {
   getFFSInfo,
   addFileToFFS,
-  addFileToIPFS,
   getDataFromFFS,
   setDefaultConfig,
   getCidConfig,
@@ -22,7 +21,6 @@ function Pin(props) {
     getFFSInfo,
     getDataFromFFS,
     addFileToFFS,
-    addFileToIPFS,
     setDefaultConfig,
     getCidConfig,
     getActualCidConfig,
@@ -33,7 +31,7 @@ function Pin(props) {
     history.push("/");
   }
 
-  if (!user.ffsInfo) {
+  if (!user.defaultConfig) {
     getFFSInfo();
   }
 
@@ -213,6 +211,11 @@ function Pin(props) {
         className="btn btn-primary mb-2"
         onClick={() => {
           const file = document.getElementById("fileToUpload").files[0];
+          console.log(typeof file);
+          if (file === undefined) {
+            console.log("Please select file");
+            return;
+          }
           const enablePublicIPFS = document.getElementById("enablePublicIPFS")
             .checked;
           const allowUnfreeze = document.getElementById("allowUnfreeze")
@@ -275,7 +278,7 @@ function Pin(props) {
                       enabled: renew,
                       threshold: parseInt(threshold),
                     },
-                    addr: user.ffsInfo.defaultConfig.cold.filecoin.addr,
+                    addr: user.defaultConfig.cold.filecoin.addr,
                     maxPrice: parseInt(maxPrice),
                   },
                 },
@@ -345,7 +348,6 @@ const mapDispatchToProps = (dispatch) => ({
   getFFSInfo: () => dispatch(getFFSInfo()),
   getDataFromFFS: (payload) => dispatch(getDataFromFFS(payload)),
   addFileToFFS: (payload) => dispatch(addFileToFFS(payload)),
-  addFileToIPFS: (payload) => dispatch(addFileToIPFS(payload)),
   setDefaultConfig: (payload) => dispatch(setDefaultConfig(payload)),
   getCidConfig: (payload) => dispatch(getCidConfig(payload)),
   getActualCidConfig: (payload) => dispatch(getActualCidConfig(payload)),

@@ -20,8 +20,9 @@ function Login(props) {
   }
 
   if (user.address) {
-    // Go to Networks page after user is logged in
-    history.push("/network");
+    console.log(user.address);
+    // Go to profile page after user is logged in
+    history.push("/profile");
   }
 
   return (

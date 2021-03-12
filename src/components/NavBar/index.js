@@ -26,11 +26,6 @@ export default function NavBar() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/network">
-              Network
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link className="nav-link" to="/pin">
               Pin
             </Link>

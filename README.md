@@ -23,10 +23,6 @@ Here is a sneak-peek of how the final application will look:
 
 ![Login](./assets/login.png)
 
-**Network Stats**
-
-![Network Stats](./assets/network-stats.png)
-
 **Pinning Files**
 
 ![Pinning Files](./assets/pin.png)

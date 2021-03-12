@@ -25,6 +25,8 @@ export default (state = initialState, action) => {
       return { ...state, user: { ...state.user, ...action.payload } };
     case types.GET_FFS_INFO:
       return { ...state, user: { ...state.user, ...action.payload } };
+    case types.GET_PINS_LIST:
+      return { ...state, user: { ...state.user, ...action.payload } };
     case types.ADD_FILE_TO_IPFS:
       return {
         ...state,
