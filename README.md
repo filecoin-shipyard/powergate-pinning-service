@@ -1,3 +1,5 @@
+
+![Powergate-Pinning-Service (1)](https://user-images.githubusercontent.com/13151232/110879164-ba582480-82f1-11eb-98b7-3ac2492af671.gif)
 ## Powergate Pinning Tutorial
 
 - [Overview](#overview)
@@ -22,10 +24,6 @@ Here is a sneak-peek of how the final application will look:
 **Login**
 
 ![Login](./assets/login.png)
-
-**Network Stats**
-
-![Network Stats](./assets/network-stats.png)
 
 **Pinning Files**
 

@@ -3,7 +3,6 @@ import "./App.css";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Network from "./pages/Network";
 import Pin from "./pages/Pin";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
@@ -17,9 +16,6 @@ function App() {
           <Switch>
             <Route path="/login">
               <Login />
-            </Route>
-            <Route path="/network">
-              <Network />
             </Route>
             <Route path="/pin">
               <Pin />

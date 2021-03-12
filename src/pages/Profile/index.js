@@ -1,28 +1,28 @@
 import React, { Fragment } from "react";
 import NavBar from "../../components/NavBar";
-import { getFFSInfo } from "../../redux/actions/powergate";
+import { getWalletAddresses } from "../../redux/actions/powergate";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import ReactJson from "react-json-view";
 import FilecoinGIF from "../../assets/filecoin.gif";
 
 function Profile(props) {
-  const { user, getFFSInfo } = props;
+  const { user, getWalletAddresses } = props;
   const history = useHistory();
 
-  if (!user.address) {
+  if (!user || !user.address) {
     history.push("/");
   }
 
-  if (!user.ffsInfo) {
-    getFFSInfo();
+  if (!user.wallets) {
+    getWalletAddresses();
   }
 
   return (
     <Fragment>
       <NavBar />
-      {user.ffsInfo ? (
-        user.ffsInfo.balancesList.map((wallet, index) => (
+      {user && user.wallets ? (
+        user.wallets.map((wallet, index) => (
           <div key={index} className="card" style={{ width: "52rem" }}>
             <div className="card-body">
               <h5 className="card-title">Wallet {index + 1}</h5>
@@ -30,9 +30,9 @@ function Profile(props) {
                 Your details as a powergate FFS user
               </h6>
               <div className="card-text">
-                <b>Wallet Name: </b> {wallet.addr.name} <br />
-                <b>Wallet Address: </b> {wallet.addr.addr} <br />
-                <b>Wallet Type: </b> {wallet.addr.type} <br />
+                <b>Wallet Name: </b> {wallet.name} <br />
+                <b>Wallet Address: </b> {wallet.address} <br />
+                <b>Wallet Type: </b> {wallet.type} <br />
                 <b>Wallet Balance: </b> {wallet.balance} attoFIL <br />
               </div>
               <br />
@@ -58,7 +58,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getFFSInfo: () => dispatch(getFFSInfo()),
+  getWalletAddresses: () => dispatch(getWalletAddresses()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

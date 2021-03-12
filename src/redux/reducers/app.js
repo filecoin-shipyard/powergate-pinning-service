@@ -8,7 +8,7 @@ const initialState = {
   stats: {},
   loaded: false,
   watchLogs: [],
-  watchJobs: null,
+  watchJobs: [],
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +24,8 @@ export default (state = initialState, action) => {
     case types.CREATE_WALLET_ADDRESSES:
       return { ...state, user: { ...state.user, ...action.payload } };
     case types.GET_FFS_INFO:
+      return { ...state, user: { ...state.user, ...action.payload } };
+    case types.GET_PINS_LIST:
       return { ...state, user: { ...state.user, ...action.payload } };
     case types.ADD_FILE_TO_IPFS:
       return {
@@ -42,7 +44,7 @@ export default (state = initialState, action) => {
         },
       };
     case types.WATCH_JOBS:
-      return { ...state, watchJobs: action.payload };
+      return { ...state, watchJobs: [...state.watchJobs, action.payload] };
     case types.WATCH_LOGS:
       return { ...state, watchLogs: [...state.watchLogs, action.payload] };
     case types.GET_DATA_FROM_FFS:
