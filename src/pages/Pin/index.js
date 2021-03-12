@@ -1,16 +1,11 @@
 import React, { Fragment, useState } from "react";
-import * as System from "../../components/system";
 import {
   getFFSInfo,
   addFileToFFS,
   getDataFromFFS,
-  setDefaultConfig,
-  getCidConfig,
-  getActualCidConfig,
 } from "../../redux/actions/powergate";
 import NavBar from "../../components/NavBar";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function Pin(props) {
@@ -19,11 +14,7 @@ function Pin(props) {
     watchJobs,
     watchLogs,
     getFFSInfo,
-    getDataFromFFS,
     addFileToFFS,
-    setDefaultConfig,
-    getCidConfig,
-    getActualCidConfig,
   } = props;
   const history = useHistory();
 
@@ -293,7 +284,42 @@ function Pin(props) {
       </button>
       <br />
       <br />
-      <h3>4. Deal Status</h3>
+      <h3>4. Jobs Status</h3>
+      {watchJobs.length > 0 ? (
+        <div>
+          {watchJobs.map((job, index) => (
+            <div key={index} className="card" style={{ width: "48rem" }}>
+              <div className="card-body">
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {new Date(job.createdAt * 1000).toUTCString()}
+                </h6>
+                <p className="card-text">
+                  <b>Job ID: </b> {job.id} <br />
+                  <b>CID: </b>{" "}
+                  <a
+                    href={`http://localhost:8080/ipfs/${job.cid}`}
+                    target="_blank"
+                  >
+                    {job.cid}
+                  </a>{" "}
+                  <br />
+                  <b>Status: </b> {job.status}
+                  <br />
+                  <br />
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>
+          No Recent Jobs. Upload something to Filecoin Network to see
+          sweet-sweet deals :)
+        </p>
+      )}
+      <br />
+      <br />
+      <h3>5. Deal Status</h3>
       {watchLogs.length > 0 ? (
         <div>
           {watchLogs.map((log, index) => (
@@ -304,7 +330,7 @@ function Pin(props) {
                   {new Date(log.time * 1000).toUTCString()}
                 </h6>
                 <p className="card-text">
-                  <b>Job ID: </b> {log.jid} <br />
+                  <b>Job ID: </b> {log.jobId} <br />
                   <b>CID: </b>{" "}
                   <a
                     href={`http://localhost:8080/ipfs/${log.cid}`}
@@ -312,6 +338,9 @@ function Pin(props) {
                   >
                     {log.cid}
                   </a>{" "}
+                  <br />
+                  <b>Message: </b> {log.message}
+                  <br />
                   <br />
                 </p>
               </div>
@@ -324,6 +353,7 @@ function Pin(props) {
           sweet-sweet deals :)
         </p>
       )}
+
     </Fragment>
   );
 }
@@ -348,9 +378,6 @@ const mapDispatchToProps = (dispatch) => ({
   getFFSInfo: () => dispatch(getFFSInfo()),
   getDataFromFFS: (payload) => dispatch(getDataFromFFS(payload)),
   addFileToFFS: (payload) => dispatch(addFileToFFS(payload)),
-  setDefaultConfig: (payload) => dispatch(setDefaultConfig(payload)),
-  getCidConfig: (payload) => dispatch(getCidConfig(payload)),
-  getActualCidConfig: (payload) => dispatch(getActualCidConfig(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pin);

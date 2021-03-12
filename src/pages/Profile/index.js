@@ -9,11 +9,9 @@ import FilecoinGIF from "../../assets/filecoin.gif";
 function Profile(props) {
   const { user, getWalletAddresses } = props;
   const history = useHistory();
-  console.log(user);
-  console.log(user);
-  if (!user.address) {
+
+  if (!user || !user.address) {
     history.push("/");
-    return
   }
 
   if (!user.wallets) {
@@ -23,7 +21,7 @@ function Profile(props) {
   return (
     <Fragment>
       <NavBar />
-      {user.wallets ? (
+      {user && user.wallets ? (
         user.wallets.map((wallet, index) => (
           <div key={index} className="card" style={{ width: "52rem" }}>
             <div className="card-body">

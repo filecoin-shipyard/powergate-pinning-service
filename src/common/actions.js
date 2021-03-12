@@ -28,20 +28,6 @@ export const rehydrateViewer = async () => {
   return json;
 };
 
-export const setDefaultConfig = async (data) => {
-  const options = {
-    method: "POST",
-    headers: REQUEST_HEADERS,
-    credentials: "include",
-    body: JSON.stringify(data),
-  };
-
-  const response = await fetch(`${SERVER_PATH}/_/settings`, options);
-  const json = await response.json();
-
-  return json;
-};
-
 export const createWalletAddress = async (data) => {
   if (Strings.isEmpty(data.name)) {
     return null;

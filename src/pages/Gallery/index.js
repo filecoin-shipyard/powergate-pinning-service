@@ -1,12 +1,8 @@
 import React, { Fragment } from "react";
-import * as System from "../../components/system";
 import {
   getPinsList,
   addFileToFFS,
   getDataFromFFS,
-  setDefaultConfig,
-  getCidConfig,
-  getActualCidConfig,
 } from "../../redux/actions/powergate";
 import NavBar from "../../components/NavBar";
 import { connect } from "react-redux";
@@ -15,22 +11,11 @@ import { useHistory } from "react-router-dom";
 import FilecoinGIF from "../../assets/filecoin.gif";
 
 function Gallery(props) {
-  const {
-    user,
-    ffsFiles,
-    getDataFromFFS,
-    getPinsList,
-    /* getDataFromFFS,
-    addFileToFFS,
-    setDefaultConfig,
-    getCidConfig,
-    getActualCidConfig, */
-  } = props;
+  const { user, ffsFiles, getDataFromFFS, getPinsList } = props;
   const history = useHistory();
 
   if (!user || !user.address) {
     history.push("/");
-
   }
   
   if (!user.pinsList) {
@@ -117,9 +102,6 @@ const mapDispatchToProps = (dispatch) => ({
   getPinsList: () => dispatch(getPinsList()),
   getDataFromFFS: (payload) => dispatch(getDataFromFFS(payload)),
   addFileToFFS: (payload) => dispatch(addFileToFFS(payload)),
-  setDefaultConfig: (payload) => dispatch(setDefaultConfig(payload)),
-  getCidConfig: (payload) => dispatch(getCidConfig(payload)),
-  getActualCidConfig: (payload) => dispatch(getActualCidConfig(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
