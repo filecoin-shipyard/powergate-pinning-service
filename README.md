@@ -1,11 +1,17 @@
-## Powergate Pinning Tutorial
+# Powergate Pinning Tutorial
+
+## Status
+
+This repository is in a **frozen** state. It is not being maintained or kept in sync with the tools and libraries it builds on. Even though this work on this repository has been **shelved**, anyone interested in updating or maintaining this project should express their interest on one Filecoin community conversation mediums: <https://github.com/filecoin-project/community#join-the-community>.
+
+---
 
 - [Overview](#overview)
 - [App Architecture Overview](#app-architecture-overview)
 - [How to run](#how-to-run)
 - [License](#license)
 
-### Overview
+## Overview
 
 In this tutorial, we will build a simple pinning service using Textile Powergate.
 
@@ -31,7 +37,7 @@ Here is a sneak-peek of how the final application will look:
 
 ![Pinning Files](./assets/pin.png)
 
-### App Architecture Overview
+## App Architecture Overview
 
 Below is the 10,000 feet overview of how our application will work:
 
@@ -46,11 +52,11 @@ Below is the 10,000 feet overview of how our application will work:
 
 ![Powergate Architecture](./assets/powergate.png)
 
-### How to run
+## How to run
 
 Follow [this tutorial]() on Filecoin docs to get started.
 
-### License
+## License
 
 This is dual-licensed under Apache 2.0 and MIT terms:
 
