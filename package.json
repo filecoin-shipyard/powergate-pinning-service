@@ -22,7 +22,7 @@
     "react-tippy": "^1.4.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "three": "^0.117.1"
+    "three": "^0.125.0"
   },
   "scripts": {
     "start": "react-scripts start",
